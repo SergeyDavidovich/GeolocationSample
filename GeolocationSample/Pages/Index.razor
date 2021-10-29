@@ -1,8 +1,6 @@
 ﻿@*https://github.com/AspNetMonsters/Blazor.Geolocation*@
-
-@*Don't foget to add Location.js to wwwroot and reference in index.html*@
-
-
+@*Don't foget to add Location.js to wwwroot and reference it in the index.html*@
+@*===========================================================================*@
 
 @using AspNetMonsters.Blazor.Geolocation
 
@@ -12,10 +10,11 @@
 
 <h1>Hello, Location!</h1>
 
-<div>
-    Latitude: @alocation?.Latitude.ToString() <br />
-    Longitude: @alocation?.Longitude.ToString() <br />
-    Accuracy: @alocation?.Accuracy <br />
+<div style="border-bottom-width:thin;">
+    Latitude: @location?.Latitude.ToString() <br />
+    Longitude: @location?.Longitude.ToString() <br />
+    Accuracy: @location?.Accuracy <br />
+    Position: @position
 </div>
 
 @*https://github.com/AspNetMonsters/Blazor.Geolocation/issues/14*@
@@ -23,12 +22,15 @@
 
 @code {
 
-    Location alocation = null;
+    Location location = null;
+    private string position = string.Empty;
 
     protected async Task GetLocation()
     {
+        await LocationService.WatchLocation(OnWatchLocationCallback);
 
-        alocation = await LocationService.GetLocationAsync();
+        location = await LocationService.GetLocationAsync();
+        
         this.StateHasChanged();
 
     }
@@ -42,4 +44,10 @@
 
         }
     }
+    private void OnWatchLocationCallback(Location obj)
+    {
+        position = $"{obj.Latitude} - {obj.Longitude} - {obj.Accuracy}";
+    }
 }
+
+@*Do further: https://github.com/AspNetMonsters/Blazor.Geolocation/issues/3*@
