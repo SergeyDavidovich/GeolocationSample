@@ -1,0 +1,45 @@
+﻿@*https://github.com/AspNetMonsters/Blazor.Geolocation*@
+
+@*Don't foget to add Location.js to wwwroot and reference in index.html*@
+
+
+
+@using AspNetMonsters.Blazor.Geolocation
+
+@page "/"
+
+@inject LocationService  LocationService
+
+<h1>Hello, Location!</h1>
+
+<div>
+    Lat: @alocation?.Latitude.ToString() <br />
+    Long: @alocation?.Longitude.ToString() <br />
+    Accuracy: @alocation?.Accuracy <br />
+</div>
+
+@*https://github.com/AspNetMonsters/Blazor.Geolocation/issues/14*@
+@*https://github.com/djaus2/Blazor.Geolocation/commit/f2b39e72a941bd2228fc695a02b1d51b273d7531*@
+
+@code {
+
+    Location alocation = null;
+
+    protected async Task GetLocation()
+    {
+
+        alocation = await LocationService.GetLocationAsync();
+        this.StateHasChanged();
+
+    }
+
+    protected override async Task OnAfterRenderAsync(bool first)
+    {
+        if (first)
+        {
+            base.OnAfterRender(first);
+            await GetLocation();
+
+        }
+    }
+}
