@@ -8,7 +8,7 @@
 
 @inject LocationService  LocationService
 
-<h1>Hello, Location!</h1>
+<h1>Hello, location!</h1>
 
 <div style="border-bottom-width:thin;">
     Latitude: @location?.Latitude.ToString() <br />
@@ -30,7 +30,8 @@
         await LocationService.WatchLocation(OnWatchLocationCallback);
 
         location = await LocationService.GetLocationAsync();
-        
+        position = $"{location.Latitude} - {location.Longitude} - {location.Accuracy}";
+
         this.StateHasChanged();
 
     }
